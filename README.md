@@ -1,121 +1,96 @@
-# Ex-1-Developing-AI-Agent-with-PEAS-Description
-### Name:SRI MUTHAZHAGAN P
+<h1>ExpNo 8 : Solve Cryptarithmetic Problem,a CSP(Constraint Satisfaction Problem) using Python</h1> 
+<h3>Name:  SRI MUTHAZHAGAN P   </h3>
+<h3>Register Number: 2305002024   </h3>
+<H3>Aim:</H3>
+<p>
+    To solve Cryptarithmetic Problem,a CSP(Constraint Satisfaction Problem) using Python
+</p>
+<h3>Procedure:</h3>
 
-### Register Number:2305002024
+Step 1: Start the program.
 
-### Aim:
-To find the PEAS description for the given AI problem and develop an AI agent.
 
-### Theory :
-PEAS stands for:
-'''
-P-Performance measure
+Step 2: Read three input words from the user —WORD1, WORD2, and RESULT.
 
-E-Environment
 
-A-Actuators
+Step 3: Combine all letters from the three words and find the unique letters.
 
-S-Sensors
-'''
+  a)If there are more than 10 unique letters → stop (since digits 0–9 can only represent 10 unique letters).
 
-It’s a framework used to define the task environment for an AI agent clearly.
+Step 4: Generate all possible digit assignments (permutations) for these unique letters.
 
-### Pick an AI Problem
+Step 5: For each permutation:
 
+  a) Create a mapping of each letter to a digit.
+  
+  b) Check if any leading letter of the three words is assigned 0 — if yes, skip this permutation.
+  
+  c) Convert each word into its numeric equivalent using the current mapping.
+  
+  d) Check if WORD1 + WORD2 == RESULT.
+
+Step 6: If a valid mapping is found that satisfies the equation:
+
+  a) Display the numeric values of WORD1, WORD2, and RESULT.
+  
+  b) Display the letter-to-digit mapping.
+
+Step 7: If no valid mapping is found after checking all permutations, print “No solution found.”
+
+
+Step 8: End the program.
+
+## PROGRAM
+```Python
+
+from itertools import permutations
+
+def solve_cryptarithmetic(word1, word2, result):
+ 
+    letters = set(word1 + word2 + result)
+    if len(letters) > 10:
+        print("Too many unique letters (max 10 allowed).")
+        return None
+
+    letters = list(letters)
+
+    for perm in permutations(range(10), len(letters)):
+        mapping = dict(zip(letters, perm))
+
+        if mapping[word1[0]] == 0 or mapping[word2[0]] == 0 or mapping[result[0]] == 0:
+            continue
+
+        num1 = int("".join(str(mapping[ch]) for ch in word1))
+        num2 = int("".join(str(mapping[ch]) for ch in word2))
+        num_result = int("".join(str(mapping[ch]) for ch in result))
+
+        if num1 + num2 == num_result:
+            return num1, num2, num_result, mapping
+
+    return None
+
+word1 = input("Enter first word: ").upper()
+word2 = input("Enter second word: ").upper()
+result = input("Enter result word: ").upper()
+
+solution = solve_cryptarithmetic(word1, word2, result)
+
+if solution:
+    num1, num2, num_result, mapping = solution
+    print(f"\nSolution found!")
+    print(f"{word1} = {num1}")
+    print(f"{word2} = {num2}")
+    print(f"{result} = {num_result}")
+    print(f"Mapping: {mapping}")
+else:
+    print("No solution found.")
 ```
+## Output
 
-1. Self-driving car
-
-2. Chess playing agent
-
-3. Vacuum cleaning robot
-
-4. Email spam filter
-
-5. Personal assistant (like Siri or Alexa)
-```
-
-### VacuumCleanerAgent
-### Algorithm:
-Step 1: Initialize:
-
-Set agent’s location to A
-
-Set environment dirt status for locations A and B (True = dirty, False = clean)
-
-Step 2 :Repeat until all locations are clean (no dirt):
-a. Sense if current location has dirt
-b. If current location has dirt:
-- Suck dirt (set dirt status at current location to False)
-c. Else:
-- If current location is A, move right to location B
-- Else if current location is B, move left to location A
-d. Print the agent’s current location and dirt status (optional for debugging)
-
-Step 3: Stop when all locations are clean
-
-Step 4: Print total steps taken (optional)
-
-### Program:
-```
-class VacuumCleanerAgent:
-    def __init__(self):
-        # Initialize the agent's state (location and dirt status)
-        self.location = "A"  # Initial location (can be "A" or "B")
-        self.dirt_status = {"A": False, "B": False}  # Initial dirt status (False means no dirt)
-
-    def move_left(self):
-        # Move the agent to the left if possible
-        if self.location == "B":
-            self.location = "A"
-
-    def move_right(self):
-        # Move the agent to the right if possible
-        if self.location == "A":
-            self.location = "B"
-
-    def suck_dirt(self):
-        # Suck dirt in the current location if there is dirt
-        if self.dirt_status[self.location]:
-            self.dirt_status[self.location] = False
-            print(f"Sucked dirt in location {self.location}")
-
-    def do_nothing(self):
-        # Do nothing
-        pass
-
-    def perform_action(self, action):
-        # Perform the specified action
-        if action == "left":
-            self.move_left()
-        elif action == "right":
-            self.move_right()
-        elif action == "suck":
-            self.suck_dirt()
-        elif action == "nothing":
-            self.do_nothing()
-        else:
-            print("Invalid action")
-
-    def print_status(self):
-        # Print the current status of the agent
-        print(f"Location: {self.location}, Dirt Status: {self.dirt_status}")
-
-# Example usage:
-agent = VacuumCleanerAgent()
+<img width="945" height="433" alt="image" src="https://github.com/user-attachments/assets/c8d7bfd0-b566-4470-bcd4-f19abfcbd4f6" />
 
 
-# Move the agent, suck dirt, and do nothing
 
-agent.perform_action("left")
-agent.print_status()
-agent.perform_action("suck")
-agent.print_status()
-agent.perform_action("nothing")
-agent.print_status()
-```
-### Sample Output:
-
-425810495-d1198ba7-da19-413b-9907-4844afae627f
-
-### Result:
+<hr>
+<h2>Result:</h2>
+<p> Thus a Cryptarithmetic Problem was solved using Python successfully</p>
