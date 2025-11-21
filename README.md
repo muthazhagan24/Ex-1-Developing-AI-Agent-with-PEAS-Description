@@ -1,96 +1,141 @@
-<h1>ExpNo 8 : Solve Cryptarithmetic Problem,a CSP(Constraint Satisfaction Problem) using Python</h1> 
-<h3>Name:  SRI MUTHAZHAGAN P   </h3>
-<h3>Register Number: 2305002024   </h3>
-<H3>Aim:</H3>
-<p>
-    To solve Cryptarithmetic Problem,a CSP(Constraint Satisfaction Problem) using Python
-</p>
-<h3>Procedure:</h3>
+# Ex-1-Developing-AI-Agent-with-PEAS-Description
+### Name: SRI MUTHAZHAGAN P
 
-Step 1: Start the program.
+### Register Number: 2305002024
 
+### Aim:
+To find the PEAS description for the given AI problem and develop an AI agent.
 
-Step 2: Read three input words from the user —WORD1, WORD2, and RESULT.
+### Theory :
+PEAS stands for:
+'''
+P-Performance measure
 
+E-Environment
 
-Step 3: Combine all letters from the three words and find the unique letters.
+A-Actuators
 
-  a)If there are more than 10 unique letters → stop (since digits 0–9 can only represent 10 unique letters).
+S-Sensors
+'''
 
-Step 4: Generate all possible digit assignments (permutations) for these unique letters.
+It’s a framework used to define the task environment for an AI agent clearly.
 
-Step 5: For each permutation:
+### Chess playing agent
+### Algorithm:
+Step 1: Initialize:
 
-  a) Create a mapping of each letter to a digit.
-  
-  b) Check if any leading letter of the three words is assigned 0 — if yes, skip this permutation.
-  
-  c) Convert each word into its numeric equivalent using the current mapping.
-  
-  d) Check if WORD1 + WORD2 == RESULT.
+Set agent’s location to A
 
-Step 6: If a valid mapping is found that satisfies the equation:
+Set environment dirt status for locations A and B (True = dirty, False = clean)
 
-  a) Display the numeric values of WORD1, WORD2, and RESULT.
-  
-  b) Display the letter-to-digit mapping.
+Step 2 :Repeat until all locations are clean (no dirt):
+a. Sense if current location has dirt
+b. If current location has dirt:
+- Suck dirt (set dirt status at current location to False)
+c. Else:
+- If current location is A, move right to location B
+- Else if current location is B, move left to location A
+d. Print the agent’s current location and dirt status (optional for debugging)
 
-Step 7: If no valid mapping is found after checking all permutations, print “No solution found.”
+Step 3: Stop when all locations are clean
 
+Step 4: Print total steps taken (optional)
 
-Step 8: End the program.
-
-## PROGRAM
-```Python
-
-from itertools import permutations
-
-def solve_cryptarithmetic(word1, word2, result):
- 
-    letters = set(word1 + word2 + result)
-    if len(letters) > 10:
-        print("Too many unique letters (max 10 allowed).")
-        return None
-
-    letters = list(letters)
-
-    for perm in permutations(range(10), len(letters)):
-        mapping = dict(zip(letters, perm))
-
-        if mapping[word1[0]] == 0 or mapping[word2[0]] == 0 or mapping[result[0]] == 0:
-            continue
-
-        num1 = int("".join(str(mapping[ch]) for ch in word1))
-        num2 = int("".join(str(mapping[ch]) for ch in word2))
-        num_result = int("".join(str(mapping[ch]) for ch in result))
-
-        if num1 + num2 == num_result:
-            return num1, num2, num_result, mapping
-
-    return None
-
-word1 = input("Enter first word: ").upper()
-word2 = input("Enter second word: ").upper()
-result = input("Enter result word: ").upper()
-
-solution = solve_cryptarithmetic(word1, word2, result)
-
-if solution:
-    num1, num2, num_result, mapping = solution
-    print(f"\nSolution found!")
-    print(f"{word1} = {num1}")
-    print(f"{word2} = {num2}")
-    print(f"{result} = {num_result}")
-    print(f"Mapping: {mapping}")
-else:
-    print("No solution found.")
+### Program:
 ```
-## Output
+import random
 
-<img width="945" height="433" alt="image" src="https://github.com/user-attachments/assets/c8d7bfd0-b566-4470-bcd4-f19abfcbd4f6" />
+# Starting chess board
+board = [
+    ["r","n","b","q","k","b","n","r"],
+    ["p","p","p","p","p","p","p","p"],
+    [".",".",".",".",".",".",".","."],
+    [".",".",".",".",".",".",".","."],
+    [".",".",".",".",".",".",".","."],
+    [".",".",".",".",".",".",".","."],
+    ["P","P","P","P","P","P","P","P"],
+    ["R","N","B","Q","K","B","N","R"]
+]
+
+def print_board():
+    print("   a b c d e f g h")
+    for i, row in enumerate(board):
+        print(f"{8-i}  " + " ".join(row))
+    print()
+
+def notation_to_pos(move):
+    col_map = "abcdefgh"
+    return 8-int(move[1]), col_map.index(move[0])
+
+def pos_to_notation(pos):
+    row,col = pos
+    col_map = "abcdefgh"
+    return f"{col_map[col]}{8-row}"
+
+def get_moves(is_white):
+    moves = []
+    for r in range(8):
+        for c in range(8):
+            piece = board[r][c]
+            if piece == ".": 
+                continue
+            if is_white and piece.isupper() or (not is_white and piece.islower()):
+                for rr in range(8):
+                    for cc in range(8):
+                        if (rr,cc)!=(r,c) and board[rr][cc]=="." or (is_white and board[rr][cc].islower()) or (not is_white and board[rr][cc].isupper()):
+                            moves.append(((r,c),(rr,cc)))
+    return moves
+
+def make_move(start,end):
+    r1,c1=start; r2,c2=end
+    board[r2][c2]=board[r1][c1]
+    board[r1][c1]="."
+
+def game():
+    white_turn=True
+    print_board()
+    while True:
+        flat=sum(board,[])
+        if "K" not in flat:
+            print("Black wins! King captured.")
+            break
+        if "k" not in flat:
+            print("White wins! King captured.")
+            break
+
+        if white_turn:
+            move=input("Your move (e.g., e2 e4): ").split()
+            try:
+                start=notation_to_pos(move[0]); end=notation_to_pos(move[1])
+                make_move(start,end)
+            except:
+                print("Invalid input, try again."); continue
+        else:
+            moves=get_moves(False)
+            if not moves: 
+                print("Stalemate!"); break
+            start,end=random.choice(moves)
+            make_move(start,end)
+            print(f"AI plays {pos_to_notation(start)} {pos_to_notation(end)}")
+
+        print_board()
+        white_turn=not white_turn
+
+game()
+```
+### Output:
+### Chess Board
+<img width="248" height="214" alt="image" src="https://github.com/user-attachments/assets/5cc7b31a-659b-402e-b628-c98947282c80" />
+
+### Moving for our side
+<img width="366" height="239" alt="image" src="https://github.com/user-attachments/assets/cf6845af-3ec8-4343-b1a9-9869ff0f7ce3" />
+
+### Ai Moves
+<img width="225" height="230" alt="image" src="https://github.com/user-attachments/assets/62181e63-0f3d-4386-b86e-874839e315d6" />
 
 
 
-<hr>
-<h2>Result:</h2>
-<p> Thus a Cryptarithmetic Problem was solved using Python successfully</p>
+
+
+### Result:
+Thus,the program for Developing-AI-Agent-with-PEAS- chess board was implemented and executed successfully.
